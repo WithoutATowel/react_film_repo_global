@@ -19,8 +19,14 @@ class FilmListing extends Component {
     }
 
     render() {
-        let allFilms = this.props.films.map((film, index) => {
-            return <FilmRow film={film} key={film.key} />
+        const { faves, films } = this.props;
+        let allFilms = films.map((film, index) => {
+            return (
+                <FilmRow onFaveToggle={() => this.props.onFaveToggle(film)}
+                    film={film} 
+                    key={film.id}
+                    isFave={ faves.includes(film) }  />
+            )
         })
 
         const allActive = (this.state.filter === 'all') ? 'is-active' : '';
@@ -32,7 +38,7 @@ class FilmListing extends Component {
                 <div className="film-list-filters">
                     <div className={"film-list-filter " + allActive} onClick={ (e) => this.handleFilterClick('all') }>
                         ALL
-                        <span className="section-count">{this.props.films.length}</span>
+                        <span className="section-count">{films.length}</span>
                     </div>
                     <div className={"film-list-filter " + favesActive} onClick={ (e) => this.handleFilterClick('faves') }>
                         FAVES

@@ -8,14 +8,39 @@ import TMDB from './TMDB.js';
 const films = TMDB.films
 
 class App extends Component {
-  render() {
-    return (
-      <div className='film-library'>
-        <FilmListing films={films} />
-        <FilmDetails films={films} />
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            films,
+            faves: [],
+            current: {}
+        }
+        this.handleFaveToggle = this.handleFaveToggle.bind(this);
+    }
+
+    handleFaveToggle(film) {
+        const faves = Array.from(this.state.faves);
+        const filmIndex = faves.indexOf(film);
+        if (filmIndex !== -1) {
+            // The film is already faved, so remove it
+            faves.splice(filmIndex, 1);
+            console.log("Removing a favorite", film.title)
+        } else {
+            // The film needs to be added
+            faves.push(film);
+            console.log("Adding a favorite", film.title)
+        }
+        this.setState({ faves });
+    }
+
+    render() {
+        return (
+         <div className='film-library'>
+           <FilmListing faves={this.state.faves} onFaveToggle={this.handleFaveToggle} films={this.state.films}  />
+           <FilmDetails film={this.state.current} />
+         </div>
+        );
+    }
 }
 
 export default App;
