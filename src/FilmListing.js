@@ -20,17 +20,31 @@ class FilmListing extends Component {
 
     render() {
         const { faves, films } = this.props;
-        let allFilms = films.map((film, index) => {
-            return (
-                <FilmRow onFaveToggle={() => this.props.onFaveToggle(film)}
-                    film={film} 
-                    key={film.id}
-                    isFave={ faves.includes(film) }  />
-            )
-        })
-
         const allActive = (this.state.filter === 'all') ? 'is-active' : '';
-        const favesActive = (this.state.filter === 'faves') ? 'is-active' : '';  
+        const favesActive = (this.state.filter === 'faves') ? 'is-active' : '';
+        let allFilms = [];
+
+        if (this.state.filter === 'all') {
+            allFilms = films.map((film, index) => {
+                return (
+                    <FilmRow onFaveToggle={ () => this.props.onFaveToggle(film) }
+                        onDetailsClick={ () => this.props.onDetailsClick(film) }
+                        film={film} 
+                        key={film.id}
+                        isFave={ faves.includes(film) } />
+                )
+            })
+        } else {
+            allFilms = faves.map((film, index) => {
+                return (
+                    <FilmRow onFaveToggle={ () => this.props.onFaveToggle(film) }
+                        onDetailsClick={ () => this.props.onDetailsClick(film) }
+                        film={film} 
+                        key={film.id}
+                        isFave={ faves.includes(film) } />
+                )
+            })
+        } 
 
         return (
             <div className="film-list">
@@ -42,7 +56,7 @@ class FilmListing extends Component {
                     </div>
                     <div className={"film-list-filter " + favesActive} onClick={ (e) => this.handleFilterClick('faves') }>
                         FAVES
-                        <span className="section-count">0</span>
+                        <span className="section-count">{faves.length}</span>
                     </div>
                 </div>
                 {allFilms}

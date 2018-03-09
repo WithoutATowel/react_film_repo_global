@@ -33,10 +33,17 @@ class App extends Component {
         this.setState({ faves });
     }
 
+    handleDetailsClick = (film) => {
+        console.log('Fetching details for ' + film.title);
+        this.setState({
+            current: film
+        })
+    }
+
     render() {
         return (
          <div className='film-library'>
-           <FilmListing faves={this.state.faves} onFaveToggle={this.handleFaveToggle} films={this.state.films}  />
+           <FilmListing faves={this.state.faves} onDetailsClick={this.handleDetailsClick} onFaveToggle={this.handleFaveToggle} films={this.state.films}  />
            <FilmDetails film={this.state.current} />
          </div>
         );
